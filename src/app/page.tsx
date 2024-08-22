@@ -1,113 +1,204 @@
-import Image from "next/image";
+'use client'
+
+import { Header } from '@/components/Header'
+import { InputField } from '@/components/InputField'
+import { Modal } from '@/components/Modal'
+import { Select } from '@/components/Select'
+import { plate } from '@/services/plates'
+import { Calculator, CirclePlus } from 'lucide-react'
+import { useState } from 'react'
 
 export default function Home() {
+  const [open, setOpen] = useState(false)
+  const [total, setTotal] = useState(0)
+  const [gratuites, setGratuites] = useState(0)
+
+  // Estado para gerenciar as linhas da tabela
+  const [rows, setRows] = useState([
+    {
+      empresa: 'Amazonia Inter',
+      cnpj: '12.647.487/0001-88',
+      nomeLinha: '',
+      prefixo: '',
+      codigoLinha: '',
+      sentido: 'GO - DF',
+      localOrigem: '',
+      localDestino: '',
+      dia: '',
+      horario: '',
+      placa: plate()[0], // Assume o primeiro valor para início
+      pagantes: total - gratuites,
+      idoso: gratuites,
+    },
+  ])
+
+  function openModal() {
+    setOpen(true)
+  }
+
+  function closeModal() {
+    setOpen(false)
+
+    // Agora que o modal foi fechado, use `updateTotalAndGratuites`
+  }
+
+  // Função para adicionar uma nova linha
+  function addRow() {
+    setRows([
+      ...rows,
+      {
+        empresa: 'Amazonia Inter',
+        cnpj: '12.647.487/0001-88',
+        nomeLinha: '',
+        prefixo: '',
+        codigoLinha: '',
+        sentido: '',
+        localOrigem: '',
+        localDestino: '',
+        dia: '',
+        horario: '00:00',
+        placa: plate()[0], // Assume o primeiro valor para início
+        pagantes: 0,
+        idoso: 0,
+      },
+    ])
+  }
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+    <div className="px-6 py-4">
+      <Header />
 
-      <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+      <main className="relative overflow-x-auto shadow-md sm:rounded-lg mt-8">
+        <table className="w-full text-sm text-left rtl:text-right text-gray-400">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-400">
+            <tr>
+              <th className="px-2 py-3">Empresa</th>
+              <th className="w-[180px] px-2 py-3">CNPJ</th>
+              <th className="w-[420px] px-2 py-3">Nome da Linha</th>
+              <th className="w-[120px] px-2 py-3">Prefixo</th>
+              <th className="w-[120px] px-2 py-3">Código (Linha)</th>
+              <th className="w-[140px] px-2 py-3">Sentido</th>
+              <th className="w-[200px] px-2 py-3">Local de origem</th>
+              <th className="w-[180px] px-2 py-3">Local de destino</th>
+              <th className="w-[100px] px-2 py-3">Dia</th>
+              <th className="w-[100px] px-2 py-3">Horário</th>
+              <th className="w-[180px] px-2 py-3">Placa</th>
+              <th className="w-[80px] px-2 py-3">Pagantes</th>
+              <th className="w-[80px] px-2 py-3">Idoso</th>
+              <th className="px-2 py-3"></th>
+              <th className="px-2 py-3"></th>
+            </tr>
+          </thead>
 
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
+          <tbody>
+            {rows.map((row, index) => (
+              <tr
+                key={index}
+                className="even:bg-gray-800 bg-slate-800 border-b border-gray-700 text-white"
+              >
+                <th className="px-2 py-4 font-medium whitespace-nowrap">
+                  {row.empresa}
+                </th>
+                <td className="px-2 py-4">{row.cnpj}</td>
+                <td className="px-1 py-4">
+                  <Select>
+                    <option>{row.nomeLinha}</option>
+                    <option>PLANALTINA/GO - BRASILIA/DF</option>
+                    <option>PLANALTINA/GO - PLANALTINA/DF</option>
+                    <option>PLANALTINA/GO - SOBRADINHO/DF</option>
+                    <option>PLANALTINA/DF - FORMOSA/GO</option>
+                  </Select>
+                </td>
+                <td className="px-2 py-4">
+                  <Select>
+                    <option value="1">{row.prefixo}</option>
+                    <option value="2">321</option>
+                    <option value="3">000</option>
+                  </Select>
+                </td>
+                <td className="px-2 py-4">
+                  <Select>
+                    <option>{row.codigoLinha}</option>
+                    <option>1004</option>
+                    <option>1054</option>
+                    <option>1108</option>
+                    <option>1301</option>
+                  </Select>
+                </td>
+                <td className="px-2 py-4">
+                  <Select>
+                    <option>{row.sentido}</option>
+                    <option>DF - GO</option>
+                  </Select>
+                </td>
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
+                <td className="px-2 py-4">
+                  <Select>
+                    <option>{row.localOrigem}</option>
+                    <option>Planaltina-DF</option>
+                    <option>Brasilia</option>
+                    <option>Formosa</option>
+                    <option>Sobradinho</option>
+                  </Select>
+                </td>
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Explore starter templates for Next.js.
-          </p>
-        </a>
+                <td className="px-2 py-4">
+                  <Select>
+                    <option>{row.localDestino}</option>
+                    <option>Planaltina-DF</option>
+                    <option>Brasilia</option>
+                    <option>Formosa</option>
+                    <option>Sobradinho</option>
+                  </Select>
+                </td>
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  );
+                <td className="px-2 py-4">
+                  <InputField type="date" value={row.dia} />
+                </td>
+                <td className="px-2 py-4">
+                  <InputField type="time" value={row.horario} />
+                </td>
+                <td className="px-2 py-4">
+                  <Select>
+                    {plate().map((p, index) => (
+                      <option key={index}>{p}</option>
+                    ))}
+                  </Select>
+                </td>
+                <td className="px-2 py-4">{row.pagantes}</td>
+                <td className="px-2 py-4">
+                  <InputField
+                    value={row.idoso}
+                    onChange={(e) => setGratuites(e.target.value)}
+                  />
+                </td>
+                <td>
+                  <button
+                    onClick={openModal}
+                    className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-4 py-2.5 me-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+                  >
+                    <Calculator />
+                  </button>
+                </td>
+                <td>
+                  <button className="text-red-500 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-4 py-2.5 me-2">
+                    -
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </main>
+
+      {open && <Modal close={closeModal} setTotal={setTotal} />}
+
+      <button
+        onClick={addRow}
+        className="w-full text-gray-900 focus:outline-none hover:bg-gray-100 font-medium rounded-sm text-sm px-5 py-2.5 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 focus:ring-0 transition-colors"
+      >
+        <CirclePlus className="mx-auto" />
+      </button>
+    </div>
+  )
 }
