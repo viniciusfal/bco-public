@@ -5,48 +5,58 @@ import { InputField } from '@/components/InputField'
 import { Modal } from '@/components/Modal'
 import { Select } from '@/components/Select'
 import { plate } from '@/services/plates'
+
 import { Calculator, CirclePlus } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function Home() {
   const [open, setOpen] = useState(false)
-  const [total, setTotal] = useState(0)
-  const [gratuites, setGratuites] = useState(0)
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
 
-  // Estado para gerenciar as linhas da tabela
-  const [rows, setRows] = useState([
-    {
-      empresa: 'Amazonia Inter',
-      cnpj: '12.647.487/0001-88',
-      nomeLinha: '',
-      prefixo: '',
-      codigoLinha: '',
-      sentido: 'GO - DF',
-      localOrigem: '',
-      localDestino: '',
-      dia: '',
-      horario: '',
-      placa: plate()[0], // Assume o primeiro valor para início
-      pagantes: total - gratuites,
-      idoso: gratuites,
-    },
-  ])
+  // Carrega dados do localStorage ao inicializar o estado
+  const [rows, setRows] = useState(() => {
+    const savedRows = localStorage.getItem('rows')
+    return savedRows
+      ? JSON.parse(savedRows)
+      : [
+          {
+            id: '1',
+            empresa: 'Amazonia Inter',
+            cnpj: '12.647.487/0001-88',
+            nomeLinha: '',
+            prefixo: '',
+            codigoLinha: '',
+            sentido: 'GO - DF',
+            localOrigem: '',
+            localDestino: '',
+            dia: '',
+            horario: '00:00',
+            placa: plate()[0],
+            pagantes: 0,
+            idoso: 0,
+          },
+        ]
+  })
 
-  function openModal() {
+  useEffect(() => {
+    // Salva linhas no localStorage sempre que rows mudar
+    localStorage.setItem('rows', JSON.stringify(rows))
+  }, [rows])
+
+  function openModal(index: number) {
+    setSelectedIndex(index)
     setOpen(true)
   }
 
   function closeModal() {
     setOpen(false)
-
-    // Agora que o modal foi fechado, use `updateTotalAndGratuites`
+    setSelectedIndex(null)
   }
-
-  // Função para adicionar uma nova linha
   function addRow() {
     setRows([
       ...rows,
       {
+        id: (rows.length + 1).toString(),
         empresa: 'Amazonia Inter',
         cnpj: '12.647.487/0001-88',
         nomeLinha: '',
@@ -57,16 +67,38 @@ export default function Home() {
         localDestino: '',
         dia: '',
         horario: '00:00',
-        placa: plate()[0], // Assume o primeiro valor para início
+        placa: plate()[0],
         pagantes: 0,
         idoso: 0,
       },
     ])
   }
 
+  function handleRowChange(index: number, field: string, value: any) {
+    const updatedRows = [...rows]
+    updatedRows[index] = { ...updatedRows[index], [field]: value }
+    setRows(updatedRows)
+  }
+
+  function handlePagantesChange(index: number, value: number) {
+    const updatedRows = [...rows]
+    updatedRows[index] = { ...updatedRows[index], pagantes: value }
+    setRows(updatedRows)
+  }
+
+  function handleSaveRoleta(initial: number, final: number) {
+    if (selectedIndex !== null) {
+      const updatedRows = [...rows]
+      const pagantes = final - initial
+      updatedRows[selectedIndex] = { ...updatedRows[selectedIndex], pagantes }
+      setRows(updatedRows)
+      closeModal()
+    }
+  }
+
   return (
     <div className="px-6 py-4">
-      <Header />
+      <Header setRows={setRows} rows={rows} />
 
       <main className="relative overflow-x-auto shadow-md sm:rounded-lg mt-8">
         <table className="w-full text-sm text-left rtl:text-right text-gray-400">
@@ -91,7 +123,7 @@ export default function Home() {
           </thead>
 
           <tbody>
-            {rows.map((row, index) => (
+            {rows.map((row: any, index: number) => (
               <tr
                 key={index}
                 className="even:bg-gray-800 bg-slate-800 border-b border-gray-700 text-white"
@@ -101,8 +133,13 @@ export default function Home() {
                 </th>
                 <td className="px-2 py-4">{row.cnpj}</td>
                 <td className="px-1 py-4">
-                  <Select>
-                    <option>{row.nomeLinha}</option>
+                  <Select
+                    value={row.nomeLinha}
+                    onChange={(e) =>
+                      handleRowChange(index, 'nomeLinha', e.target.value)
+                    }
+                  >
+                    <option value="">Selecione</option>
                     <option>PLANALTINA/GO - BRASILIA/DF</option>
                     <option>PLANALTINA/GO - PLANALTINA/DF</option>
                     <option>PLANALTINA/GO - SOBRADINHO/DF</option>
@@ -110,15 +147,26 @@ export default function Home() {
                   </Select>
                 </td>
                 <td className="px-2 py-4">
-                  <Select>
-                    <option value="1">{row.prefixo}</option>
+                  <Select
+                    value={row.prefixo}
+                    onChange={(e) =>
+                      handleRowChange(index, 'prefixo', e.target.value)
+                    }
+                  >
+                    <option value="">Selecione</option>
+                    <option value="1">001</option>
                     <option value="2">321</option>
                     <option value="3">000</option>
                   </Select>
                 </td>
                 <td className="px-2 py-4">
-                  <Select>
-                    <option>{row.codigoLinha}</option>
+                  <Select
+                    value={row.codigoLinha}
+                    onChange={(e) =>
+                      handleRowChange(index, 'codigoLinha', e.target.value)
+                    }
+                  >
+                    <option value="">Selecione</option>
                     <option>1004</option>
                     <option>1054</option>
                     <option>1108</option>
@@ -126,15 +174,26 @@ export default function Home() {
                   </Select>
                 </td>
                 <td className="px-2 py-4">
-                  <Select>
-                    <option>{row.sentido}</option>
+                  <Select
+                    value={row.sentido}
+                    onChange={(e) =>
+                      handleRowChange(index, 'sentido', e.target.value)
+                    }
+                  >
+                    <option value="">Selecione</option>
                     <option>DF - GO</option>
+                    <option>GO - DF</option>
                   </Select>
                 </td>
 
                 <td className="px-2 py-4">
-                  <Select>
-                    <option>{row.localOrigem}</option>
+                  <Select
+                    value={row.localOrigem}
+                    onChange={(e: any) =>
+                      handleRowChange(index, 'localOrigem', e.target.value)
+                    }
+                  >
+                    <option value="">Selecione</option>
                     <option>Planaltina-DF</option>
                     <option>Brasilia</option>
                     <option>Formosa</option>
@@ -143,8 +202,13 @@ export default function Home() {
                 </td>
 
                 <td className="px-2 py-4">
-                  <Select>
-                    <option>{row.localDestino}</option>
+                  <Select
+                    value={row.localDestino}
+                    onChange={(e: any) =>
+                      handleRowChange(index, 'localDestino', e.target.value)
+                    }
+                  >
+                    <option value="">Selecione</option>
                     <option>Planaltina-DF</option>
                     <option>Brasilia</option>
                     <option>Formosa</option>
@@ -153,35 +217,71 @@ export default function Home() {
                 </td>
 
                 <td className="px-2 py-4">
-                  <InputField type="date" value={row.dia} />
+                  <InputField
+                    type="date"
+                    value={row.dia}
+                    onChange={(e: any) =>
+                      handleRowChange(index, 'dia', e.target.value)
+                    }
+                  />
                 </td>
                 <td className="px-2 py-4">
-                  <InputField type="time" value={row.horario} />
+                  <InputField
+                    type="time"
+                    value={row.horario}
+                    onChange={(e: any) =>
+                      handleRowChange(index, 'horario', e.target.value)
+                    }
+                  />
                 </td>
                 <td className="px-2 py-4">
-                  <Select>
-                    {plate().map((p, index) => (
-                      <option key={index}>{p}</option>
+                  <Select
+                    value={row.placa}
+                    onChange={(e: any) =>
+                      handleRowChange(index, 'placa', e.target.value)
+                    }
+                  >
+                    {plate().map((p, idx) => (
+                      <option key={idx} value={p}>
+                        {p}
+                      </option>
                     ))}
                   </Select>
                 </td>
-                <td className="px-2 py-4">{row.pagantes}</td>
                 <td className="px-2 py-4">
                   <InputField
+                    type="number"
+                    value={row.pagantes}
+                    onChange={(e: any) =>
+                      handlePagantesChange(index, Number(e.target.value))
+                    }
+                  />
+                </td>
+                <td className="px-2 py-4">
+                  <InputField
+                    type="number"
                     value={row.idoso}
-                    onChange={(e) => setGratuites(e.target.value)}
+                    onChange={(e: any) =>
+                      handleRowChange(index, 'idoso', Number(e.target.value))
+                    }
                   />
                 </td>
                 <td>
                   <button
-                    onClick={openModal}
+                    onClick={() => openModal(index)}
                     className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-4 py-2.5 me-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
                   >
                     <Calculator />
                   </button>
                 </td>
                 <td>
-                  <button className="text-red-500 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-4 py-2.5 me-2">
+                  <button
+                    onClick={() => {
+                      const newRows = rows.filter((_, i) => i !== index)
+                      setRows(newRows)
+                    }}
+                    className="text-red-500 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-4 py-2.5 me-2"
+                  >
                     -
                   </button>
                 </td>
@@ -191,7 +291,14 @@ export default function Home() {
         </table>
       </main>
 
-      {open && <Modal close={closeModal} setTotal={setTotal} />}
+      {open && selectedIndex !== null && (
+        <Modal
+          open={open}
+          onClose={closeModal}
+          title="Calcular Passageiros"
+          onSave={(initial, final) => handleSaveRoleta(initial, final)}
+        />
+      )}
 
       <button
         onClick={addRow}

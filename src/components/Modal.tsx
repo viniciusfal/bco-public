@@ -1,74 +1,56 @@
 import { useState } from 'react'
+import { InputField } from './InputField'
 
-export function Modal({ close, setTotal }) {
-  const [rolInitial, setRolInitial] = useState(0)
-  const [rolFinal, setRolFinal] = useState(0)
+interface ModalProps {
+  open: boolean
+  onClose: () => void
+  title: string
+  onSave: (initial: number, final: number) => void
+}
 
-  const handleSave = () => {
-    const calculatedTotal = rolFinal - rolInitial
-    setTotal(calculatedTotal)
-    close()
-  }
+export function Modal({ open, onClose, title, onSave }: ModalProps) {
+  const [initialValue, setInitialValue] = useState<number>(0)
+  const [finalValue, setFinalValue] = useState<number>(0)
+
+  if (!open) return null
 
   return (
-    <div
-      id="static-modal"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="modal-title"
-      className="fixed inset-0 z-50 flex justify-center items-center overflow-y-auto overflow-x-hidden w-full h-[calc(100%-1rem)] max-h-full"
-    >
-      <div className="relative p-4 max-w-2xl w-full max-h-full">
-        <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
-          <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-            <h3
-              id="modal-title"
-              className="text-xl font-semibold text-gray-900 dark:text-white"
-            >
-              Calcular roleta
-            </h3>
-          </div>
-
-          <div className="flex gap-2 p-4">
-            <input
-              type="text"
-              className="p-2 w-32 text-sm rounded-sm bg-transparent font-bold border border-gray-300 dark:border-gray-600"
-              placeholder="Roleta Inicial"
-              value={rolInitial}
-              onChange={(e) => setRolInitial(Number(e.target.value))}
-            />
-            <input
-              type="text"
-              className="p-2 w-32 text-sm rounded-sm bg-transparent font-bold border border-gray-300 dark:border-gray-600"
-              placeholder="Roleta final"
-              value={rolFinal}
-              onChange={(e) => setRolFinal(Number(e.target.value))}
-            />
-            <input
-              type="number"
-              className="p-2 w-32 text-sm rounded-sm bg-transparent font-bold border border-gray-300 dark:border-gray-600"
-              placeholder="Total"
-              disabled
-              value={rolFinal - rolInitial}
-            />
-          </div>
-
-          <div className="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-            <button
-              type="button"
-              onClick={handleSave}
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
-              Salvar
-            </button>
-            <button
-              type="button"
-              onClick={close}
-              className="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-            >
-              Sair
-            </button>
-          </div>
+    <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
+      <div className="bg-slate-800 p-4 rounded shadow-lg">
+        <h2 className="text-lg font-semibold mb-4">{title}</h2>
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-1">
+            Roleta Inicial
+          </label>
+          <InputField
+            type="text"
+            value={initialValue}
+            onChange={(e: any) => setInitialValue(Number(e.target.value))}
+            className="w-full border border-gray-300 rounded p-2"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-1">Roleta Final</label>
+          <InputField
+            type="text"
+            value={finalValue}
+            onChange={(e: any) => setFinalValue(Number(e.target.value))}
+            className="w-full border border-gray-300 rounded p-2"
+          />
+        </div>
+        <div className="flex justify-end space-x-2">
+          <button
+            onClick={() => onSave(initialValue, finalValue)}
+            className="bg-blue-500 text-white px-4 py-2 rounded"
+          >
+            Salvar
+          </button>
+          <button
+            onClick={onClose}
+            className="bg-gray-500 text-white px-4 py-2 rounded"
+          >
+            Fechar
+          </button>
         </div>
       </div>
     </div>
