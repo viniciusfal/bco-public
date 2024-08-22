@@ -1,4 +1,8 @@
-export function Select({ children, ...props }) {
+interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+  children: React.ReactNode
+}
+
+export function Select({ children, ...props }: SelectProps) {
   return (
     <select
       {...props}
