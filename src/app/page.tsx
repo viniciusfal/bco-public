@@ -134,7 +134,7 @@ export default function Home() {
                 <td className="px-1 py-4">
                   <Select
                     value={row.nomeLinha}
-                    onChange={(e: any) =>
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
                       handleRowChange(index, 'nomeLinha', e.target.value)
                     }
                   >
@@ -148,7 +148,7 @@ export default function Home() {
                 <td className="px-2 py-4">
                   <Select
                     value={row.prefixo}
-                    onChange={(e: any) =>
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
                       handleRowChange(index, 'prefixo', e.target.value)
                     }
                   >
@@ -161,7 +161,7 @@ export default function Home() {
                 <td className="px-2 py-4">
                   <Select
                     value={row.codigoLinha}
-                    onChange={(e: any) =>
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
                       handleRowChange(index, 'codigoLinha', e.target.value)
                     }
                   >
@@ -175,7 +175,7 @@ export default function Home() {
                 <td className="px-2 py-4">
                   <Select
                     value={row.sentido}
-                    onChange={(e: any) =>
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
                       handleRowChange(index, 'sentido', e.target.value)
                     }
                   >
@@ -188,7 +188,7 @@ export default function Home() {
                 <td className="px-2 py-4">
                   <Select
                     value={row.localOrigem}
-                    onChange={(e: any) =>
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
                       handleRowChange(index, 'localOrigem', e.target.value)
                     }
                   >
@@ -203,7 +203,7 @@ export default function Home() {
                 <td className="px-2 py-4">
                   <Select
                     value={row.localDestino}
-                    onChange={(e: any) =>
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
                       handleRowChange(index, 'localDestino', e.target.value)
                     }
                   >
@@ -219,7 +219,7 @@ export default function Home() {
                   <InputField
                     type="date"
                     value={row.dia}
-                    onChange={(e: any) =>
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
                       handleRowChange(index, 'dia', e.target.value)
                     }
                   />
@@ -228,7 +228,7 @@ export default function Home() {
                   <InputField
                     type="time"
                     value={row.horario}
-                    onChange={(e: any) =>
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
                       handleRowChange(index, 'horario', e.target.value)
                     }
                   />
@@ -236,7 +236,7 @@ export default function Home() {
                 <td className="px-2 py-4">
                   <Select
                     value={row.placa}
-                    onChange={(e: any) =>
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
                       handleRowChange(index, 'placa', e.target.value)
                     }
                   >
@@ -251,7 +251,7 @@ export default function Home() {
                   <InputField
                     type="number"
                     value={row.pagantes}
-                    onChange={(e: any) =>
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
                       handlePagantesChange(index, Number(e.target.value))
                     }
                   />
@@ -260,7 +260,7 @@ export default function Home() {
                   <InputField
                     type="number"
                     value={row.idoso}
-                    onChange={(e: any) =>
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
                       handleRowChange(index, 'idoso', Number(e.target.value))
                     }
                   />
