@@ -13,7 +13,6 @@ export default function Home() {
   const [open, setOpen] = useState(false)
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
 
-  // Carrega dados do localStorage ao inicializar o estado
   const [rows, setRows] = useState(() => {
     const savedRows = localStorage.getItem('rows')
     return savedRows
@@ -135,7 +134,7 @@ export default function Home() {
                 <td className="px-1 py-4">
                   <Select
                     value={row.nomeLinha}
-                    onChange={(e) =>
+                    onChange={(e: any) =>
                       handleRowChange(index, 'nomeLinha', e.target.value)
                     }
                   >
@@ -149,7 +148,7 @@ export default function Home() {
                 <td className="px-2 py-4">
                   <Select
                     value={row.prefixo}
-                    onChange={(e) =>
+                    onChange={(e: any) =>
                       handleRowChange(index, 'prefixo', e.target.value)
                     }
                   >
@@ -162,7 +161,7 @@ export default function Home() {
                 <td className="px-2 py-4">
                   <Select
                     value={row.codigoLinha}
-                    onChange={(e) =>
+                    onChange={(e: any) =>
                       handleRowChange(index, 'codigoLinha', e.target.value)
                     }
                   >
@@ -176,7 +175,7 @@ export default function Home() {
                 <td className="px-2 py-4">
                   <Select
                     value={row.sentido}
-                    onChange={(e) =>
+                    onChange={(e: any) =>
                       handleRowChange(index, 'sentido', e.target.value)
                     }
                   >
@@ -277,7 +276,9 @@ export default function Home() {
                 <td>
                   <button
                     onClick={() => {
-                      const newRows = rows.filter((_, i) => i !== index)
+                      const newRows = rows.filter(
+                        (_: any, i: number) => i !== index,
+                      )
                       setRows(newRows)
                     }}
                     className="text-red-500 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-4 py-2.5 me-2"
