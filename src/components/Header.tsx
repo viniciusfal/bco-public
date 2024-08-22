@@ -1,32 +1,44 @@
 import * as XLSX from 'xlsx'
 import { saveAs } from 'file-saver'
 import { Download } from 'lucide-react'
+import { useEffect, useState } from 'react'
 
 interface HeaderProps {
-  setRows: (array: []) => void
+  setRows: (array: any[]) => void
   rows: any[]
 }
+
 export function Header({ setRows, rows }: HeaderProps) {
+  const [isClient, setIsClient] = useState(false)
+
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+
   function clearLocalStorage() {
-    localStorage.removeItem('rows')
-    // Atualize o estado para refletir a limpeza dos dados
-    setRows([])
+    if (isClient) {
+      localStorage.removeItem('rows')
+      setRows([])
+    }
   }
 
   function exportToExcel() {
-    const worksheet = XLSX.utils.json_to_sheet(rows)
-    const workbook = XLSX.utils.book_new()
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1')
+    if (isClient) {
+      const worksheet = XLSX.utils.json_to_sheet(rows)
+      const workbook = XLSX.utils.book_new()
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1')
 
-    const excelBuffer = XLSX.write(workbook, {
-      bookType: 'xlsx',
-      type: 'array',
-    })
-    const file = new Blob([excelBuffer], {
-      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    })
-    saveAs(file, 'tabela.xlsx')
+      const excelBuffer = XLSX.write(workbook, {
+        bookType: 'xlsx',
+        type: 'array',
+      })
+      const file = new Blob([excelBuffer], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      })
+      saveAs(file, 'tabela.xlsx')
+    }
   }
+
   return (
     <header className="flex items-center justify-between">
       <div>
@@ -44,7 +56,7 @@ export function Header({ setRows, rows }: HeaderProps) {
           </button>
         </div>
         <button
-          className="text-sm border rounded-md p-2 hover:bg-red-600 transition-colors "
+          className="text-sm border rounded-md p-2 hover:bg-red-600 transition-colors"
           onClick={clearLocalStorage}
         >
           Começar do Zero

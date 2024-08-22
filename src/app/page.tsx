@@ -12,33 +12,37 @@ import { useEffect, useState } from 'react'
 export default function Home() {
   const [open, setOpen] = useState(false)
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
+  const [rows, setRows] = useState<any[]>([])
 
-  const [rows, setRows] = useState(() => {
-    const savedRows = localStorage.getItem('rows')
-    return savedRows
-      ? JSON.parse(savedRows)
-      : [
-          {
-            id: '1',
-            empresa: 'Amazonia Inter',
-            cnpj: '12.647.487/0001-88',
-            nomeLinha: '',
-            prefixo: '',
-            codigoLinha: '',
-            sentido: 'GO - DF',
-            localOrigem: '',
-            localDestino: '',
-            dia: '',
-            horario: '00:00',
-            placa: plate()[0],
-            pagantes: 0,
-            idoso: 0,
-          },
-        ]
-  })
-
+  // Initialize state with localStorage value on client-side
   useEffect(() => {
-    // Salva linhas no localStorage sempre que rows mudar
+    const savedRows = localStorage.getItem('rows')
+    if (savedRows) {
+      setRows(JSON.parse(savedRows))
+    } else {
+      setRows([
+        {
+          id: '1',
+          empresa: 'Amazonia Inter',
+          cnpj: '12.647.487/0001-88',
+          nomeLinha: '',
+          prefixo: '',
+          codigoLinha: '',
+          sentido: 'GO - DF',
+          localOrigem: '',
+          localDestino: '',
+          dia: '',
+          horario: '00:00',
+          placa: plate()[0],
+          pagantes: 0,
+          idoso: 0,
+        },
+      ])
+    }
+  }, [])
+
+  // Save rows to localStorage whenever it changes
+  useEffect(() => {
     localStorage.setItem('rows', JSON.stringify(rows))
   }, [rows])
 
@@ -51,6 +55,7 @@ export default function Home() {
     setOpen(false)
     setSelectedIndex(null)
   }
+
   function addRow() {
     setRows([
       ...rows,
