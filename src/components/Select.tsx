@@ -6,7 +6,7 @@ export function Select({ children, ...props }: SelectProps) {
   return (
     <select
       {...props}
-      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+      className="border  text-zinc-900 text-sm rounded-lg focus:ring-[#22331d]  focus:border-[#22331d] block w-full p-2.5 bg-[#f5f5f5]  dark:placeholder-gray-400 "
     >
       {children}
     </select>
