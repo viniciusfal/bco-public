@@ -28,19 +28,21 @@ export function Header({ setRows, rows }: HeaderProps) {
 
     // Define columns based on the table
     worksheet.columns = [
-      { header: 'Empresa', key: 'empresa', width: 30 },
+      { header: 'Empresa', key: 'empresa', width: 20 },
       { header: 'CNPJ', key: 'cnpj', width: 20 },
-      { header: 'Nome da Linha', key: 'nomeLinha', width: 30 },
+      { header: 'Nome da Linha', key: 'nomeLinha', width: 40 },
       { header: 'Prefixo', key: 'prefixo', width: 10 },
-      { header: 'Código', key: 'codigoLinha', width: 15 },
-      { header: 'Sentido', key: 'sentido', width: 15 },
-      { header: 'Local de origem', key: 'localOrigem', width: 25 },
-      { header: 'Local de destino', key: 'localDestino', width: 25 },
+      { header: 'Código', key: 'codigoLinha', width: 10 },
+      { header: 'Sentido', key: 'sentido', width: 10 },
+      { header: 'Local de origem', key: 'localOrigem', width: 15 },
+      { header: 'Local de destino', key: 'localDestino', width: 15 },
       { header: 'Dia', key: 'dia', width: 15 },
-      { header: 'Horário', key: 'horario', width: 15 },
-      { header: 'Placa', key: 'placa', width: 20 },
+      { header: 'Horário', key: 'horario', width: 10 },
+      { header: 'Placa', key: 'placa', width: 15 },
       { header: 'Pagantes', key: 'pagantes', width: 10 },
-      { header: 'Idosos', key: 'idosos', width: 10 },
+      { header: 'Idosos', key: 'idoso', width: 10 },
+      { header: 'Passe Livre', width: 8 },
+      { header: 'Jovem de Baixa renda', width: 8 },
     ]
 
     // Add rows to the worksheet
@@ -62,7 +64,7 @@ export function Header({ setRows, rows }: HeaderProps) {
 
     worksheet.eachRow((row) => {
       row.eachCell({ includeEmpty: true }, (cell) => {
-        cell.alignment = { horizontal: 'center', vertical: 'middle' }
+        cell.alignment = { horizontal: 'left', vertical: 'middle' }
         cell.border = {
           top: { style: 'thin', color: { argb: 'a1a1aa' } },
           left: { style: 'thin', color: { argb: 'a1a1aa' } },

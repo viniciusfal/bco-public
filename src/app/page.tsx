@@ -200,7 +200,7 @@ export default function Home() {
                     }
                   >
                     <option value="">-</option>
-                    <option value="">Planaltina-GO</option>
+                    <option>Planaltina-GO</option>
                     <option>Planaltina-DF</option>
                     <option>Brasilia</option>
                     <option>Formosa</option>
