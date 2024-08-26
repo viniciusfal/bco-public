@@ -164,7 +164,6 @@ export default function Home() {
                     <option>PLANALTINA/GO - PLANALTINA/DF</option>
                     <option>PLANALTINA/GO - SOBRADINHO/DF</option>
                     <option>PLANALTINA/DF - FORMOSA/GO</option>
-                    <option>FORMOSA/GO - BRASILIA/DF</option>
                   </Select>
                 </td>
                 <td className="px-2 py-4">
