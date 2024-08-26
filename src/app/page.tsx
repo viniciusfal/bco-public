@@ -15,7 +15,6 @@ export default function Home() {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   const [rows, setRows] = useState<any[]>([])
 
-  // Initialize state with localStorage value on client-side
   useEffect(() => {
     const savedRows = localStorage.getItem('rows')
     if (savedRows) {
@@ -42,7 +41,6 @@ export default function Home() {
     }
   }, [])
 
-  // Save rows to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem('rows', JSON.stringify(rows))
   }, [rows])
@@ -82,6 +80,12 @@ export default function Home() {
   function handleRowChange(index: number, field: string, value: any) {
     const updatedRows = [...rows]
     updatedRows[index] = { ...updatedRows[index], [field]: value }
+
+    // Update prefixo based on nomeLinha
+    if (field === 'nomeLinha') {
+      updatedRows[index].prefixo = getPrefix(value)
+    }
+
     setRows(updatedRows)
   }
 
@@ -101,6 +105,17 @@ export default function Home() {
     }
   }
 
+  function getPrefix(nomeLinha: string) {
+    switch (nomeLinha) {
+      case 'PLANALTINA/GO - PLANALTINA/DF':
+        return '12-1070-70'
+      case 'PLANALTINA/DF - FORMOSA/GO':
+        return '12-0338-70'
+      default:
+        return '12-0730-70'
+    }
+  }
+
   return (
     <div className="px-6 py-4">
       <Header setRows={setRows} rows={rows} />
@@ -109,14 +124,14 @@ export default function Home() {
         <table className="w-full text-sm text-left rtl:text-right">
           <thead className="text-xs font-bold text-[#22331d] uppercase bg-[#f0eee9] ">
             <tr>
-              <th className="px-2 py-3">Empresa</th>
-              <th className="w-[180px] px-2 py-3">CNPJ</th>
-              <th className="w-[420px] px-2 py-3">Nome da Linha</th>
-              <th className="w-[120px] px-2 py-3">Prefixo</th>
+              <th className="px-1 py-3">Empresa</th>
+              <th className="w-[160px] px-2 py-3">CNPJ</th>
+              <th className="w-[450px] px-2 py-3">Nome da Linha</th>
+              <th className="w-[180px] px-2 py-3">Prefixo</th>
               <th className="w-[120px] px-2 py-3">Código (Linha)</th>
               <th className="w-[140px] px-2 py-3">Sentido</th>
               <th className="w-[200px] px-2 py-3">Local de origem</th>
-              <th className="w-[180px] px-2 py-3">Local de destino</th>
+              <th className="w-[200px] px-2 py-3">Local de destino</th>
               <th className="w-[100px] px-2 py-3">Dia</th>
               <th className="w-[100px] px-2 py-3">Horário</th>
               <th className="w-[180px] px-2 py-3">Placa</th>
@@ -153,17 +168,11 @@ export default function Home() {
                   </Select>
                 </td>
                 <td className="px-2 py-4">
-                  <Select
+                  <InputField
                     value={row.prefixo}
-                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                      handleRowChange(index, 'prefixo', e.target.value)
-                    }
-                  >
-                    <option value="">-</option>
-                    <option value="1">001</option>
-                    <option value="2">321</option>
-                    <option value="3">000</option>
-                  </Select>
+                    onChange={() => {}}
+                    // Disabled because prefixo is now managed by nomeLinha
+                  />
                 </td>
                 <td className="px-2 py-4">
                   <Select
@@ -228,7 +237,7 @@ export default function Home() {
                   <InputField
                     type="date"
                     value={row.dia}
-                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                       handleRowChange(index, 'dia', e.target.value)
                     }
                   />
@@ -237,7 +246,7 @@ export default function Home() {
                   <InputField
                     type="time"
                     value={row.horario}
-                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                       handleRowChange(index, 'horario', e.target.value)
                     }
                   />
@@ -261,7 +270,7 @@ export default function Home() {
                     type="number"
                     min={0}
                     value={row.pagantes - row.idoso}
-                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                       handlePagantesChange(index, Number(e.target.value))
                     }
                   />
@@ -271,7 +280,7 @@ export default function Home() {
                     type="number"
                     min={0}
                     value={row.idoso}
-                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                       handleRowChange(index, 'idoso', Number(e.target.value))
                     }
                   />
@@ -292,7 +301,7 @@ export default function Home() {
                       )
                       setRows(newRows)
                     }}
-                    className="text-red-500 focus:outline-none hover:bg-red-500  hover:text-zinc-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-4 py-2.5 me-2"
+                    className="text-red-500 focus:outline-none hover:bg-red-500 hover:text-zinc-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-4 py-2.5 me-2"
                   >
                     -
                   </button>
@@ -314,7 +323,7 @@ export default function Home() {
 
       <button
         onClick={addRow}
-        className="w-full  focus:outline-none  font-medium rounded-sm text-sm px-5 py-2.5 text-[#f5f5f5] hover:bg-zinc-300  hover:text-[#22331d] border-[#f5f5f5] focus:ring-0 transition-colors"
+        className="w-full focus:outline-none font-medium rounded-sm text-sm px-5 py-2.5 text-[#f5f5f5] hover:bg-zinc-300 hover:text-[#22331d] border-[#f5f5f5] focus:ring-0 transition-colors"
       >
         <CirclePlus className="mx-auto" />
       </button>
