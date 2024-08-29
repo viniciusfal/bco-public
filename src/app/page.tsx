@@ -27,7 +27,7 @@ export default function Home() {
           cnpj: '12.647.487/0001-88',
           nomeLinha: '',
           prefixo: '',
-          codigoLinha: lines()[0],
+          codigoLinha: '',
           sentido: 'GO - DF',
           localOrigem: '',
           localDestino: '',
@@ -64,8 +64,8 @@ export default function Home() {
         cnpj: '12.647.487/0001-88',
         nomeLinha: '',
         prefixo: '',
-        codigoLinha: lines()[0],
-        sentido: '',
+        codigoLinha: '',
+        sentido: 'GO - DF',
         localOrigem: '',
         localDestino: '',
         dia: '',
@@ -84,6 +84,20 @@ export default function Home() {
     // Update prefixo based on nomeLinha
     if (field === 'nomeLinha') {
       updatedRows[index].prefixo = getPrefix(value)
+    }
+
+    // Update localOrigem and localDestino based on codigoLinha and sentido
+    if (field === 'codigoLinha' || field === 'sentido') {
+      const line = lines().find((l) => l.cod === updatedRows[index].codigoLinha)
+      if (line) {
+        updatedRows[index].localOrigem =
+          updatedRows[index].sentido === 'GO - DF' ? line.local1 : line.local2
+        updatedRows[index].localDestino =
+          updatedRows[index].sentido === 'GO - DF' ? line.local2 : line.local1
+      } else {
+        updatedRows[index].localOrigem = ''
+        updatedRows[index].localDestino = ''
+      }
     }
 
     setRows(updatedRows)
@@ -122,7 +136,7 @@ export default function Home() {
 
       <main className="relative overflow-x-auto shadow-md sm:rounded-lg mt-8">
         <table className="w-full text-sm text-left rtl:text-right">
-          <thead className="text-xs font-bold text-[#22331d] uppercase bg-[#f0eee9] ">
+          <thead className="text-xs font-bold text-teal-800 uppercase bg-[#f0eee9] ">
             <tr>
               <th className="px-1 py-3">Empresa</th>
               <th className="w-[160px] px-2 py-3">CNPJ</th>
@@ -135,9 +149,9 @@ export default function Home() {
               <th className="w-[100px] px-2 py-3">Dia</th>
               <th className="w-[100px] px-2 py-3">Horário</th>
               <th className="w-[180px] px-2 py-3">Placa</th>
-              <th className="w-[80px] px-2 py-3">Pagantes</th>
-              <th className="w-[80px] px-2 py-3">Idoso</th>
-              <th className="px-2 py-3"></th>
+              <th className="bg-[#f0eee9] w-[80px] px-2 py-3">Pagantes</th>
+              <th className="bg-[#f0eee9] w-[80px] px-2 py-3">Idoso</th>
+              <th className="bg-[#f0eee9] px-1 py-3"></th>
               <th className="px-2 py-3"></th>
             </tr>
           </thead>
@@ -167,11 +181,7 @@ export default function Home() {
                   </Select>
                 </td>
                 <td className="px-2 py-4">
-                  <InputField
-                    value={row.prefixo}
-                    onChange={() => {}}
-                    // Disabled because prefixo is now managed by nomeLinha
-                  />
+                  <InputField value={row.prefixo} onChange={() => {}} />
                 </td>
                 <td className="px-2 py-4">
                   <Select
@@ -180,9 +190,10 @@ export default function Home() {
                       handleRowChange(index, 'codigoLinha', e.target.value)
                     }
                   >
+                    <option>-</option>
                     {lines().map((l, idx) => (
-                      <option key={idx} value={l}>
-                        {l}
+                      <option key={idx} value={l.cod}>
+                        {l.cod}
                       </option>
                     ))}
                   </Select>
@@ -194,9 +205,8 @@ export default function Home() {
                       handleRowChange(index, 'sentido', e.target.value)
                     }
                   >
-                    <option>-</option>
-                    <option>DF - GO</option>
                     <option>GO - DF</option>
+                    <option>DF - GO</option>
                   </Select>
                 </td>
 
@@ -207,12 +217,17 @@ export default function Home() {
                       handleRowChange(index, 'localOrigem', e.target.value)
                     }
                   >
-                    <option value="">-</option>
-                    <option>Planaltina-GO</option>
-                    <option>Planaltina-DF</option>
-                    <option>Brasilia</option>
-                    <option>Formosa</option>
-                    <option>Sobradinho</option>
+                    {lines()
+                      .filter((l) => l.cod === row.codigoLinha)
+                      .map((l, idx) => {
+                        const local =
+                          row.sentido === 'GO - DF' ? l.local1 : l.local2
+                        return (
+                          <option key={idx} value={local}>
+                            {local}
+                          </option>
+                        )
+                      })}
                   </Select>
                 </td>
 
@@ -223,12 +238,17 @@ export default function Home() {
                       handleRowChange(index, 'localDestino', e.target.value)
                     }
                   >
-                    <option value="">-</option>
-                    <option>Planaltina-GO</option>
-                    <option>Planaltina-DF</option>
-                    <option>Brasilia</option>
-                    <option>Formosa</option>
-                    <option>Sobradinho</option>
+                    {lines()
+                      .filter((l) => l.cod === row.codigoLinha)
+                      .map((l, idx) => {
+                        const local =
+                          row.sentido === 'GO - DF' ? l.local2 : l.local1
+                        return (
+                          <option key={idx} value={local}>
+                            {local}
+                          </option>
+                        )
+                      })}
                   </Select>
                 </td>
 
@@ -264,7 +284,8 @@ export default function Home() {
                     ))}
                   </Select>
                 </td>
-                <td className="px-2 py-4">
+
+                <td className="px-2 py-4 bg-[#f0eee9]">
                   <InputField
                     type="number"
                     min={0}
@@ -274,7 +295,7 @@ export default function Home() {
                     }
                   />
                 </td>
-                <td className="px-2 py-4">
+                <td className="px-2 py-4 bg-[#f0eee9]">
                   <InputField
                     type="number"
                     min={0}
@@ -284,10 +305,10 @@ export default function Home() {
                     }
                   />
                 </td>
-                <td>
+                <td className="bg-[#f0eee9]">
                   <button
                     onClick={() => openModal(index)}
-                    className="focus:outline-none focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-4 py-2.5 me-2 bg-[#22331d] text-zinc-100"
+                    className="focus:outline-none focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-4 py-2.5  bg-teal-800 text-zinc-100"
                   >
                     <Calculator />
                   </button>

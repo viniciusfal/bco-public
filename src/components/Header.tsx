@@ -26,32 +26,74 @@ export function Header({ setRows, rows }: HeaderProps) {
     const workbook = new ExcelJS.Workbook()
     const worksheet = workbook.addWorksheet('Sheet1')
 
-    // Define columns based on the table
+    // Adiciona uma linha com o título "Demandas Domês"
+    worksheet.addRow([])
+    worksheet.mergeCells('A1:O1') // Mescla as células da coluna A até a O para o título
+    worksheet.getCell('A1').alignment = {
+      horizontal: 'center',
+      vertical: 'middle',
+    }
+
     worksheet.columns = [
-      { header: 'Empresa', key: 'empresa', width: 20 },
-      { header: 'CNPJ', key: 'cnpj', width: 20 },
-      { header: 'Nome da Linha', key: 'nomeLinha', width: 40 },
-      { header: 'Prefixo', key: 'prefixo', width: 10 },
-      { header: 'Código', key: 'codigoLinha', width: 10 },
+      { header: 'Empresa', key: 'empresa', width: 15 },
+      { header: 'CNPJ', key: 'cnpj', width: 18 },
+      { header: 'Nome da Linha', key: 'nomeLinha', width: 33 },
+      { header: 'Prefixo', key: 'prefixo', width: 11 },
+      { header: 'Código', key: 'codigoLinha', width: 8 },
       { header: 'Sentido', key: 'sentido', width: 10 },
-      { header: 'Local de origem', key: 'localOrigem', width: 15 },
-      { header: 'Local de destino', key: 'localDestino', width: 15 },
-      { header: 'Dia', key: 'dia', width: 15 },
-      { header: 'Horário', key: 'horario', width: 10 },
-      { header: 'Placa', key: 'placa', width: 15 },
+      { header: 'Local de origem', key: 'localOrigem', width: 32 },
+      { header: 'Local de destino', key: 'localDestino', width: 32 },
+      { header: 'Dia', key: 'dia', width: 12 },
+      { header: 'Horário', key: 'horario', width: 9 },
+      { header: 'Placa', key: 'placa', width: 12 },
       { header: 'Pagantes', key: 'pagantes', width: 10 },
-      { header: 'Idosos', key: 'idoso', width: 10 },
-      { header: 'Passe Livre', width: 8 },
-      { header: 'Jovem de Baixa renda', width: 8 },
+      { header: 'Idosos', key: 'idoso', width: 8 },
+      { header: 'Passe Livre', key: 'passeLivre', width: 10 },
+      { header: 'Jovem de Baixa Renda', key: 'jovem', width: 10 },
     ]
 
-    // Add rows to the worksheet
-    rows.forEach((row) => worksheet.addRow(row))
+    worksheet.getCell('A1').value = 'DADOS DE DEMANDA REFERENTE AO MÊS DE '
+    worksheet.addRow([
+      'Empresa',
+      'CNPJ',
+      'Nome da Linha',
+      'Prefixo',
+      'Código',
+      'Sentido',
+      'Local de origem',
+      'Local de destino',
+      'Dia',
+      'Horário',
+      'Placa',
+      'Pagantes',
+      'Idosos',
+      'Passe Livre',
+      'Jovem de Baixa renda',
+    ])
 
-    // Apply styles
-    worksheet.getRow(1).font = { bold: true, color: { argb: 'ffffff' } }
+    rows.forEach((row) => {
+      const updateRow = { ...row, passeLivre: 0, jovem: 0 }
+      worksheet.addRow(updateRow)
+    })
+
+    worksheet.getRow(1).font = {
+      bold: true,
+      color: { argb: 'ffffff' },
+      size: 14,
+    }
+    worksheet.getRow(2).font = {
+      bold: true,
+      color: { argb: 'ffffff' },
+      size: 12,
+    }
 
     worksheet.getRow(1).fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: '6b7280' },
+    }
+
+    worksheet.getRow(2).fill = {
       type: 'pattern',
       pattern: 'solid',
       fgColor: { argb: '6b7280' },
@@ -60,7 +102,9 @@ export function Header({ setRows, rows }: HeaderProps) {
     worksheet.eachRow((row) => {
       row.height = 20
     })
+
     worksheet.getRow(1).height = 30
+    worksheet.getRow(2).height = 60
 
     worksheet.eachRow((row) => {
       row.eachCell({ includeEmpty: true }, (cell) => {
@@ -73,6 +117,17 @@ export function Header({ setRows, rows }: HeaderProps) {
         }
       })
     })
+
+    worksheet.getRow(1).alignment = {
+      horizontal: 'center',
+      vertical: 'middle',
+    }
+
+    worksheet.getRow(2).alignment = {
+      horizontal: 'left',
+      vertical: 'middle',
+      wrapText: true,
+    }
 
     // Save the file
     workbook.xlsx
@@ -100,7 +155,7 @@ export function Header({ setRows, rows }: HeaderProps) {
         <div className="">
           <button
             onClick={exportToExcel}
-            className="font-medium text-sm border rounded-md p-2 bg-[#f0eee9]  hover:bg-zinc-50 transition-colors flex gap-1 items-center text-[#f55911]"
+            className="font-medium text-sm border rounded-md p-2 bg-teal-50  hover:bg-zinc-50 transition-colors flex gap-1 items-center text-[#f55911dc]"
           >
             <Download className="size-4" />
             Salvar em Excel
