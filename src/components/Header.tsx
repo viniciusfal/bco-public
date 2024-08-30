@@ -72,7 +72,12 @@ export function Header({ setRows, rows }: HeaderProps) {
     ])
 
     rows.forEach((row) => {
-      const updateRow = { ...row, passeLivre: 0, jovem: 0 }
+      // Calcula pagantes antes de adicionar a linha
+      const pagantes = Math.max(
+        0,
+        (row.pagantes || 0) - (row.idoso || 0) - (row.passeLivre || 0),
+      )
+      const updateRow = { ...row, jovem: 0, pagantes }
       worksheet.addRow(updateRow)
     })
 

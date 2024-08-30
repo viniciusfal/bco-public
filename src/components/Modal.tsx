@@ -16,7 +16,7 @@ export function Modal({ open, onClose, title, onSave }: ModalProps) {
 
   return (
     <div className="inset-0 fixed text-white  flex items-center justify-end pr-2">
-      <div className="p-4 rounded shadow-lg bg-teal-700] ">
+      <div className="p-4 rounded shadow-lg bg-teal-700">
         <h2 className="text-lg font-semibold mb-4">{title}</h2>
         <div className="mb-4">
           <label className="block text-sm font-medium mb-1">

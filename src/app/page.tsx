@@ -36,6 +36,7 @@ export default function Home() {
           placa: plate()[0],
           pagantes: 0,
           idoso: 0,
+          passeLivre: 0,
         },
       ])
     }
@@ -73,6 +74,7 @@ export default function Home() {
         placa: plate()[0],
         pagantes: 0,
         idoso: 0,
+        passeLivre: 0,
       },
     ])
   }
@@ -98,6 +100,17 @@ export default function Home() {
         updatedRows[index].localOrigem = ''
         updatedRows[index].localDestino = ''
       }
+    }
+
+    // Recalcular pagantes
+    if (field === 'idoso' || field === 'passeLivre') {
+      const { idoso, passeLivre } = updatedRows[index]
+      updatedRows[index].pagantes = Math.max(
+        0,
+        updatedRows[index].pagantes -
+          (idoso - value) -
+          (passeLivre - updatedRows[index].passeLivre),
+      )
     }
 
     setRows(updatedRows)
@@ -138,19 +151,18 @@ export default function Home() {
         <table className="w-full text-sm text-left rtl:text-right">
           <thead className="text-xs font-bold text-teal-800 uppercase bg-[#f0eee9] ">
             <tr>
-              <th className="px-1 py-3">Empresa</th>
-              <th className="w-[160px] px-2 py-3">CNPJ</th>
-              <th className="w-[450px] px-2 py-3">Nome da Linha</th>
+              <th className="w-[550px] px-2 py-3">Nome da Linha</th>
               <th className="w-[180px] px-2 py-3">Prefixo</th>
               <th className="w-[120px] px-2 py-3">Código (Linha)</th>
-              <th className="w-[140px] px-2 py-3">Sentido</th>
-              <th className="w-[200px] px-2 py-3">Local de origem</th>
-              <th className="w-[200px] px-2 py-3">Local de destino</th>
-              <th className="w-[100px] px-2 py-3">Dia</th>
+              <th className="w-[160px] px-2 py-3">Sentido</th>
+              <th className="w-[450px] px-2 py-3">Local de origem</th>
+              <th className="w-[480px] px-2 py-3">Local de destino</th>
+              <th className="w-[80px] px-2 py-3">Dia</th>
               <th className="w-[100px] px-2 py-3">Horário</th>
               <th className="w-[180px] px-2 py-3">Placa</th>
               <th className="bg-[#f0eee9] w-[80px] px-2 py-3">Pagantes</th>
               <th className="bg-[#f0eee9] w-[80px] px-2 py-3">Idoso</th>
+              <th className="bg-[#f0eee9] w-[80px] px-2 py-3">P.Livre</th>
               <th className="bg-[#f0eee9] px-1 py-3"></th>
               <th className="px-2 py-3"></th>
             </tr>
@@ -162,10 +174,6 @@ export default function Home() {
                 key={index}
                 className=" bg-[#fff] even:bg-[#f5f5f5]  border-gray-700 text-zinc-950"
               >
-                <th className="px-2 py-4 font-medium whitespace-nowrap">
-                  {row.empresa}
-                </th>
-                <td className="px-2 py-4">{row.cnpj}</td>
                 <td className="px-1 py-4">
                   <Select
                     value={row.nomeLinha}
@@ -289,12 +297,13 @@ export default function Home() {
                   <InputField
                     type="number"
                     min={0}
-                    value={row.pagantes - row.idoso}
+                    value={row.pagantes - row.idoso - row.passeLivre}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                       handlePagantesChange(index, Number(e.target.value))
                     }
                   />
                 </td>
+
                 <td className="px-2 py-4 bg-[#f0eee9]">
                   <InputField
                     type="number"
@@ -302,6 +311,20 @@ export default function Home() {
                     value={row.idoso}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                       handleRowChange(index, 'idoso', Number(e.target.value))
+                    }
+                  />
+                </td>
+                <td className="px-2 py-4 bg-[#f0eee9]">
+                  <InputField
+                    type="number"
+                    min={0}
+                    value={row.passeLivre}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      handleRowChange(
+                        index,
+                        'passeLivre',
+                        Number(e.target.value),
+                      )
                     }
                   />
                 </td>

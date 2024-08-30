@@ -18,7 +18,7 @@ export function lines() {
     {
       cod: '1003',
       local1: 'Rodoviária de Planaltina de Goiás',
-      local2: ' Eixo Norte e Sul (Terminal Asa Sul)  - Executivo',
+      local2: 'Eixo Norte e Sul (Terminal Asa Sul)  - Executivo',
     },
     {
       cod: '1054',
@@ -53,13 +53,13 @@ export function lines() {
     {
       cod: '1073',
       local1: 'Rodoviária de Planaltina de Goiás',
-      local2: '/ Eixo Norte e Sul (Terminal Asa Sul)',
+      local2: 'Eixo Norte e Sul (Terminal Asa Sul)',
     },
 
     {
       cod: '1074',
       local1: 'Rodoviária de Planaltina de Goiás',
-      local2: ' W3 Norte e Sul (Terminal Asa Sul)',
+      local2: 'W3 Norte e Sul (Terminal Asa Sul)',
     },
     {
       cod: '1102',
