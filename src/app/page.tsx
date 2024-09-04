@@ -4,6 +4,7 @@ import { Header } from '@/components/Header'
 import { InputField } from '@/components/InputField'
 import { Modal } from '@/components/Modal'
 import { Select } from '@/components/Select'
+import { cars } from '@/services/cars'
 import { lines } from '@/services/lines'
 import { plate } from '@/services/plates'
 
@@ -159,7 +160,7 @@ export default function Home() {
               <th className="w-[480px] px-2 py-3">Local de destino</th>
               <th className="w-[80px] px-2 py-3">Dia</th>
               <th className="w-[100px] px-2 py-3">Horário</th>
-              <th className="w-[180px] px-2 py-3">Placa</th>
+              <th className="w-[180px] px-2 py-3">Carro</th>
               <th className="bg-[#f0eee9] w-[80px] px-2 py-3">Pagantes</th>
               <th className="bg-[#f0eee9] w-[80px] px-2 py-3">Idoso</th>
               <th className="bg-[#f0eee9] w-[80px] px-2 py-3">P.Livre</th>
@@ -285,9 +286,9 @@ export default function Home() {
                       handleRowChange(index, 'placa', e.target.value)
                     }
                   >
-                    {plate().map((p, idx) => (
-                      <option key={idx} value={p}>
-                        {p}
+                    {cars().map((c, idx) => (
+                      <option key={idx} value={c.plate}>
+                        {c.car}
                       </option>
                     ))}
                   </Select>

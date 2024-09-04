@@ -8,7 +8,7 @@ export function lines() {
     {
       cod: '1001',
       local1: 'Rodoviária de Planaltina de Goiás',
-      local2: 'Rodoviária do Plano Piloto ',
+      local2: 'Rodoviária do Plano Piloto',
     },
     {
       cod: '1002',
