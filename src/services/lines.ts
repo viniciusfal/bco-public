@@ -51,6 +51,11 @@ export function lines() {
       local2: 'Terminal Asa Sul (Eixo Norte e Sul)',
     },
     {
+      cod: '1061',
+      local1: 'Planaltina-GO (Brasilinha 17)',
+      local2: 'Eixo W Norte e Sul/T.A.S.',
+    },
+    {
       cod: '1073',
       local1: 'Rodoviária de Planaltina de Goiás',
       local2: 'Eixo Norte e Sul (Terminal Asa Sul)',
