@@ -3,6 +3,7 @@ export function cars() {
     { car: 1001, plate: 'JHX-0E23' },
     { car: 1002, plate: 'JHX-4G03' },
     { car: 1003, plate: 'JHX0D23' },
+    { car: 1004, plate: 'JHX-0D03' },
     { car: 1005, plate: 'FVW-2B32' },
     { car: 1006, plate: 'FYP-4C15' },
     { car: 1007, plate: 'FIV-1H01' },

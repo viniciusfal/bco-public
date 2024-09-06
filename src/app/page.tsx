@@ -6,7 +6,6 @@ import { Modal } from '@/components/Modal'
 import { Select } from '@/components/Select'
 import { cars } from '@/services/cars'
 import { lines } from '@/services/lines'
-import { plate } from '@/services/plates'
 
 import { Calculator, CirclePlus } from 'lucide-react'
 import { useEffect, useState } from 'react'
@@ -34,7 +33,7 @@ export default function Home() {
           localDestino: '',
           dia: '',
           horario: '00:00',
-          placa: plate()[0],
+          placa: '',
           pagantes: 0,
           idoso: 0,
           passeLivre: 0,
@@ -72,7 +71,7 @@ export default function Home() {
         localDestino: '',
         dia: '',
         horario: '00:00',
-        placa: plate()[0],
+        placa: '',
         pagantes: 0,
         idoso: 0,
         passeLivre: 0,
