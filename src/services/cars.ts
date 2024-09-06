@@ -12,6 +12,7 @@ export function cars() {
     { car: 1010, plate: 'JHX-4E43' },
     { car: 1011, plate: 'JHJ-4F62' },
     { car: 1012, plate: 'JHX-0E03' },
+    { car: 1014, plate: 'JHX-0D93' },
     { car: 1015, plate: 'JHJ4F82' },
     { car: 1016, plate: 'JHX4J03' },
     { car: 1017, plate: 'JHX-0D73' },
