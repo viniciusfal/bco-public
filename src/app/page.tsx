@@ -285,6 +285,7 @@ export default function Home() {
                       handleRowChange(index, 'placa', e.target.value)
                     }
                   >
+                    <option>-</option>
                     {cars().map((c, idx) => (
                       <option key={idx} value={c.plate}>
                         {c.car}
