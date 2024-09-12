@@ -104,15 +104,22 @@ export default function Home() {
 
     // Recalcular pagantes
     if (field === 'idoso' || field === 'passeLivre') {
-      const { idoso, passeLivre } = updatedRows[index]
+      const oldIdoso = updatedRows[index].idoso
+      const oldPasseLivre = updatedRows[index].passeLivre
+
       updatedRows[index].pagantes = Math.max(
         0,
         updatedRows[index].pagantes -
-          (idoso - value) -
-          (passeLivre - updatedRows[index].passeLivre),
+          (value - (field === 'idoso' ? oldIdoso : oldPasseLivre)),
       )
-    }
 
+      // Atualize os valores antigos com os novos valores
+      if (field === 'idoso') {
+        updatedRows[index].idoso = value
+      } else {
+        updatedRows[index].passeLivre = value
+      }
+    }
     setRows(updatedRows)
   }
 
