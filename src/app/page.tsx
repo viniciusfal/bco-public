@@ -61,8 +61,8 @@ export default function Home() {
       ...rows,
       {
         id: (rows.length + 1).toString(),
-        empresa: 'Amazonia Inter',
-        cnpj: '12.647.487/0001-88',
+        empresa: 'Caravanas Inter',
+        cnpj: '00.000.000/0000-88',
         nomeLinha: '',
         prefixo: '',
         codigoLinha: '',
@@ -110,7 +110,7 @@ export default function Home() {
       updatedRows[index].pagantes = Math.max(
         0,
         updatedRows[index].pagantes -
-          (value - (field === 'idoso' ? oldIdoso : oldPasseLivre)),
+        (value - (field === 'idoso' ? oldIdoso : oldPasseLivre)),
       )
 
       // Atualize os valores antigos com os novos valores
@@ -142,11 +142,11 @@ export default function Home() {
   function getPrefix(nomeLinha: string) {
     switch (nomeLinha) {
       case 'PLANALTINA/GO - PLANALTINA/DF':
-        return '12-1070-70'
+        return '07-1070-00'
       case 'PLANALTINA/DF - FORMOSA/GO':
-        return '12-0338-70'
+        return '07-0338-00'
       default:
-        return '12-0730-70'
+        return '07-0730-00'
     }
   }
 
@@ -196,7 +196,7 @@ export default function Home() {
                   </Select>
                 </td>
                 <td className="px-2 py-4">
-                  <InputField value={row.prefixo} onChange={() => {}} />
+                  <InputField value={row.prefixo} onChange={() => { }} />
                 </td>
                 <td className="px-2 py-4">
                   <Select
