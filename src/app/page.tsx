@@ -101,7 +101,6 @@ export default function Home() {
         updatedRows[index].localDestino = ''
       }
     }
-
     // Recalcular pagantes
     if (field === 'idoso' || field === 'passeLivre') {
       const oldIdoso = updatedRows[index].idoso
@@ -110,9 +109,8 @@ export default function Home() {
       updatedRows[index].pagantes = Math.max(
         0,
         updatedRows[index].pagantes -
-        (value - (field === 'idoso' ? oldIdoso : oldPasseLivre)),
+          (value - (field === 'idoso' ? oldIdoso : oldPasseLivre)),
       )
-
       // Atualize os valores antigos com os novos valores
       if (field === 'idoso') {
         updatedRows[index].idoso = value
@@ -196,7 +194,7 @@ export default function Home() {
                   </Select>
                 </td>
                 <td className="px-2 py-4">
-                  <InputField value={row.prefixo} onChange={() => { }} />
+                  <InputField value={row.prefixo} onChange={() => {}} />
                 </td>
                 <td className="px-2 py-4">
                   <Select
