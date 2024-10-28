@@ -1,6 +1,6 @@
 # bco
 
-**bco** is a registration system for BCOs aimed at transportation companies that rely on turnstile management. The system provides an efficient solution for controlling and recording access control devices, simplifying administration and operation.
+**bco** is a registration system for BCOs aimed at transportation companies that rely on turnstile management. The system provides an efficient solution for controlling and recording access control devices, simplifying administration.
 
 ## 🛠️ Technologies Used
 - **Next.js**: React framework for web application development.
